@@ -1,0 +1,24 @@
+# Dependências
+node_modules
+
+# Build de produção
+dist
+dist-ssr
+
+# Logs
+*.log
+npm-debug.log*
+
+# Variáveis de ambiente — NUNCA versionar segredos
+.env
+.env.local
+.env.*.local
+
+# Editor / Sistema operacional
+.idea
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+
+# Cache do Vite
+.vite
