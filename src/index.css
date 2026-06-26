@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Respeita usuários que pedem menos movimento no nível do SO */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    /* Exceção: o carrossel de logos é movimento decorativo e contínuo.
+       Mantemos ele rodando mesmo sob "reduzir movimento". A classe
+       (.logo-marquee) vence a regra acima por especificidade (0,1,0 > 0,0,0). */
+    .logo-marquee {
+      animation: marquee var(--marquee-duration, 40s) linear infinite !important;
+    }
+  }
+
+  body {
+    @apply bg-base font-body text-ink antialiased;
+    /* Evita scroll horizontal causado pelos glows que "vazam" da viewport */
+    overflow-x: hidden;
+  }
+
+  /* Foco visível e consistente em toda navegação por teclado */
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-pink ring-offset-2 ring-offset-base;
+  }
+
+  ::selection {
+    background-color: rgba(210, 58, 142, 0.4);
+    color: #fff;
+  }
+}
+
+@layer utilities {
+  /* Texto preenchido com o gradiente de marca */
+  .text-gradient {
+    @apply bg-brand bg-clip-text text-transparent;
+  }
+
+  /* Borda com gradiente de marca usando mask (sem dupla div) */
+  .border-gradient {
+    position: relative;
+    background-clip: padding-box;
+    border: 1px solid transparent;
+  }
+  .border-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    margin: -1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, #ff6a1f 0%, #ff2e63 52%, #6336e8 100%);
+  }
+
+  /* Carrossel de logos: rola metade da pista (um conjunto) e reinicia sem
+     emenda, pois a 2ª metade é idêntica. A duração vem de --marquee-duration
+     (definida inline, proporcional à quantidade de logos = velocidade constante). */
+  .logo-marquee {
+    animation: marquee var(--marquee-duration, 40s) linear infinite;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
